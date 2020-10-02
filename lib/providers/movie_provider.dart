@@ -7,7 +7,7 @@ import 'package:movies_app/providers/favorite_provider.dart';
 
 class MovieProvider extends ChangeNotifier {
   static const String API_KEY = "595b0e6818e6ad4180cfc801815d4dba";
-  static const String BASE_URL = "https://api.themoviedb.org/3/movie/popular?api_key=$API_KEY&language=pt-BR&page=1";
+  static const String BASE_URL = "https://api.themoviedb.org/3/movie/popular?api_key=$API_KEY&language=pt-BR&page=";
 
   MovieProvider() {
     favoriteProvider = FavoriteProvider();
@@ -16,7 +16,7 @@ class MovieProvider extends ChangeNotifier {
 
   Future<void> readFavorites() async {
     favoriteMovies = await favoriteProvider.readFavorites();
-    // print(favoriteMovies);
+    print("Filmes favoritos: $favoriteMovies");
   }
 
   FavoriteProvider favoriteProvider;
@@ -25,32 +25,28 @@ class MovieProvider extends ChangeNotifier {
   List<Movie> favoriteMovies = [];
   int selectedIndex = 0;
 
-  Future<void> fetchMovies() async {
+  Future<void> fetchMovies([int page = 1]) async {
     print('fetchmovies');
-    final response = await http.get(BASE_URL);
+    String url = "https://api.themoviedb.org/3/movie/popular?api_key=$API_KEY&language=pt-BR&page=";
+    url += page.toString();
+    print(url);
+    final response = await http.get(url);
     Map<String, Object> movies = await json.decode(response.body);
 
     for (var movie in movies["results"]) {
       popularMovies.add(Movie.fromMap(movie));
     }
 
-    print(popularMovies);
-    // print(favoriteMovies);
-    // var selectedMovies = [];
-    // if (favoriteMovies.isNotEmpty) {
-    //   for (var movie in favoriteMovies) {
-    //     popularMovies = popularMovies.map((popMovie) {
-    //       if (popMovie.id == movie.id) {
-    //         popMovie.isFavorite = movie.isFavorite;
-    //       }
-    //     }).toList();
-    //     // selectedMovies = popularMovies.where((popMovie) => popMovie.id == movie.id).toList();
-    //     // // print(selectedMovies);
-    //     // selectedMovies = selectedMovies.map((movieSelected) {
-    //     //   return movieSelected.isFavorite = movie.isFavorite;
-    //     // }).toList();
-    //   }
-    // }
+    if (favoriteMovies.isNotEmpty) {
+      for (var popMovie in popularMovies) {
+        for (var favMovie in favoriteMovies) {
+          if (popMovie.id == favMovie.id) {
+            popMovie.isFavorite = true;
+          }
+        }
+      }
+    }
+    // print(popularMovies[0].isFavorite);
     searchPopularMovies = popularMovies;
     notifyListeners();
   }
@@ -62,18 +58,50 @@ class MovieProvider extends ChangeNotifier {
       favoriteMovies = await favoriteProvider.readFavorites();
       // print(favoriteMovies);
       // print(popularMovies[0].isFavorite);
+
+      if (favoriteMovies.isNotEmpty) {
+        for (var popMovie in popularMovies) {
+          for (var favMovie in favoriteMovies) {
+            if (popMovie.id == favMovie.id) {
+              popMovie.isFavorite = true;
+            }
+          }
+        }
+      }
+      print(movie.isFavorite);
+      searchPopularMovies = popularMovies;
+
       notifyListeners();
     }
   }
 
   void unFavoriteMovie(Movie movie) async {
     if (favoriteMovies.where((movieSelected) => movieSelected.id == movie.id).toList().isNotEmpty) {
-      // print('teste');
       movie.isFavorite = false;
       await favoriteProvider.removeFavorite(movie);
       favoriteMovies = await favoriteProvider.readFavorites();
-      // print(favoriteMovies);
+      // print(favoriteMovies[0].isFavorite);
       // print(popularMovies[0].isFavorite);
+
+      if (favoriteMovies.isNotEmpty) {
+        for (var popMovie in popularMovies) {
+          popMovie.isFavorite = false;
+        }
+        for (var popMovie in popularMovies) {
+          for (var favMovie in favoriteMovies) {
+            if (popMovie.id == favMovie.id) {
+              popMovie.isFavorite = true;
+            }
+          }
+        }
+      } else {
+        for (var popMovie in popularMovies) {
+          popMovie.isFavorite = false;
+        }
+      }
+      // print(movie.isFavorite);
+      searchPopularMovies = popularMovies;
+
       notifyListeners();
     }
   }

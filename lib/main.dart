@@ -4,6 +4,7 @@ import 'package:movies_app/providers/movie_provider.dart';
 import 'package:movies_app/screens/movies/movies_screen.dart';
 import 'package:movies_app/screens/movies_detail/movies_detail_screen.dart';
 import 'package:movies_app/screens/search/search_screen.dart';
+import 'package:movies_app/screens/splash/splash_screen.dart';
 import 'package:movies_app/utils/app_routes.dart';
 import 'package:provider/provider.dart';
 
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         routes: {
+          AppRoutes.SPLASH_SCREEN: (ctx) => SplashScreen(),
           AppRoutes.HOME: (ctx) => MoviesScreen(),
           AppRoutes.MOVIE_DETAIL: (ctx) => MoviesDetailScreen(),
           AppRoutes.SEARCH_SCREEN: (ctx) => SearchScreen(),

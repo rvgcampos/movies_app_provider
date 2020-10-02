@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movies_app/models/Movie.dart';
 import 'package:movies_app/screens/movies_detail/widgets/genre_card.dart';
+import 'package:movies_app/screens/movies_detail/widgets/rating.dart';
 
 class MoviesDetailScreen extends StatelessWidget {
   @override
@@ -26,12 +27,12 @@ class MoviesDetailScreen extends StatelessWidget {
                 right: 20,
               ),
               decoration: BoxDecoration(
-                // color: Colors.white,
-                gradient: LinearGradient(
-                  begin: Alignment.bottomCenter,
-                  end: Alignment.topCenter,
-                  colors: [Color(0xffC0CEE6), Color(0xff71A0EB)],
-                ),
+                color: Colors.white.withOpacity(0.3),
+                // gradient: LinearGradient(
+                //   begin: Alignment.bottomCenter,
+                //   end: Alignment.topCenter,
+                //   colors: [Color(0xffC0CEE6), Color(0xff71A0EB)],
+                // ),
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(25),
                   topRight: Radius.circular(25),
@@ -51,9 +52,16 @@ class MoviesDetailScreen extends StatelessWidget {
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
+                                color: Colors.white
                               ),
                             ),
-                            Text(movieSelected.releaseDate),
+                            Text(
+                              movieSelected.releaseDate,
+                              style: TextStyle(
+                                fontSize: 17,
+                                color: Colors.white.withOpacity(0.7),
+                              ),
+                            ),
                           ],
                         ),
                         Column(
@@ -63,9 +71,16 @@ class MoviesDetailScreen extends StatelessWidget {
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
+                                color: Colors.white
                               ),
                             ),
-                            Text(movieSelected.originalLanguage),
+                            Text(
+                              movieSelected.originalLanguage,
+                              style: TextStyle(
+                                fontSize: 17,
+                                color: Colors.white.withOpacity(0.7),
+                              ),
+                            ),
                           ],
                         ),
                       ],
@@ -73,16 +88,24 @@ class MoviesDetailScreen extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        // crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             'Descrição',
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 22,
+                              color: Colors.white
                             ),
                           ),
-                          Text(movieSelected.description),
+                          Text(
+                            movieSelected.description != '' ? movieSelected.description : 'Descrição do filme indisponível!',
+                            style: TextStyle(
+                              fontSize: 17,
+                              color: Colors.white.withOpacity(0.7),
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -107,16 +130,22 @@ class MoviesDetailScreen extends StatelessWidget {
                   SizedBox(height: 40),
                   Row(
                     children: <Widget>[
-                      rating(movieSelected),
-                      SizedBox(width: size.width * 0.20),
-                      Container(
-                        width: size.width * 0.40,
-                        height: size.height * 0.3,
-                        child: Hero(
-                          tag: movieSelected.id,
-                          child: Image.network(
-                            movieSelected.imageUrl,
-                            fit: BoxFit.fill,
+                      Flexible(
+                        flex: 1,
+                        child: Rating(movieSelected),
+                      ),
+                      // SizedBox(width: size.width * 0.10),
+                      Flexible(
+                        flex: 1,
+                        child: Container(
+                          width: size.width * 0.40,
+                          height: size.height * 0.3,
+                          child: Hero(
+                            tag: movieSelected.id,
+                            child: Image.network(
+                              movieSelected.imageUrl,
+                              fit: BoxFit.fill,
+                            ),
                           ),
                         ),
                       ),
@@ -137,137 +166,4 @@ class MoviesDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget rating(Movie movieSelected) {
-    return Column(
-      children: [
-        Text(
-          movieSelected.voteAverage.toString(),
-          style: TextStyle(color: Colors.white, fontSize: 25),
-        ),
-        if (movieSelected.voteAverage == 0)
-          Row(
-            children: [
-              Icon(Icons.star_border, color: Colors.yellowAccent),
-            ],
-          )
-        else if (movieSelected.voteAverage > 0 && movieSelected.voteAverage <= 1)
-          Row(
-            children: [
-              Icon(Icons.star_half, color: Colors.yellowAccent),
-            ],
-          )
-        else if (movieSelected.voteAverage > 1 && movieSelected.voteAverage <= 2)
-          Row(
-            children: [
-              Icon(Icons.star, color: Colors.yellowAccent),
-            ],
-          )
-        else if (movieSelected.voteAverage > 2 && movieSelected.voteAverage <= 3)
-          Row(
-            children: [
-              Icon(Icons.star, color: Colors.yellowAccent),
-              Icon(Icons.star_half, color: Colors.yellowAccent),
-            ],
-          )
-        else if (movieSelected.voteAverage > 3 && movieSelected.voteAverage <= 4)
-          Row(
-            children: [
-              Icon(Icons.star, color: Colors.yellowAccent),
-              Icon(Icons.star, color: Colors.yellowAccent),
-            ],
-          )
-        else if (movieSelected.voteAverage > 4 && movieSelected.voteAverage <= 5)
-          Row(
-            children: [
-              Icon(Icons.star, color: Colors.yellowAccent),
-              Icon(Icons.star, color: Colors.yellowAccent),
-              Icon(Icons.star_half, color: Colors.yellowAccent),
-            ],
-          )
-        else if (movieSelected.voteAverage > 5 && movieSelected.voteAverage <= 6)
-          Row(
-            children: [
-              Icon(Icons.star, color: Colors.yellowAccent),
-              Icon(Icons.star, color: Colors.yellowAccent),
-              Icon(Icons.star, color: Colors.yellowAccent),
-            ],
-          )
-        else if (movieSelected.voteAverage > 7 && movieSelected.voteAverage <= 8)
-          Row(
-            children: [
-              Icon(Icons.star, color: Colors.yellowAccent),
-              Icon(Icons.star, color: Colors.yellowAccent),
-              Icon(Icons.star, color: Colors.yellowAccent),
-              Icon(Icons.star_half, color: Colors.yellowAccent),
-            ],
-          )
-        else if (movieSelected.voteAverage > 8 && movieSelected.voteAverage <= 9)
-          Row(
-            children: [
-              Icon(Icons.star, color: Colors.yellowAccent),
-              Icon(Icons.star, color: Colors.yellowAccent),
-              Icon(Icons.star, color: Colors.yellowAccent),
-              Icon(Icons.star, color: Colors.yellowAccent),
-            ],
-          )
-        else if (movieSelected.voteAverage > 9 && movieSelected.voteAverage <= 10)
-          Row(
-            children: [
-              Icon(Icons.star, color: Colors.yellowAccent),
-              Icon(Icons.star, color: Colors.yellowAccent),
-              Icon(Icons.star, color: Colors.yellowAccent),
-              Icon(Icons.star, color: Colors.yellowAccent),
-              Icon(Icons.star, color: Colors.yellowAccent),
-            ],
-          )
-        else
-          Icon(Icons.star, color: Colors.red),
-      ],
-    );
-  }
 }
-
-// SingleChildScrollView(
-//               padding: EdgeInsets.symmetric(horizontal: 20),
-//               child: Column(
-//                 children: [
-//                   Image.network(
-//                     movieSelected.imageUrl,
-//                     height: 400,
-//                     fit: BoxFit.cover,
-//                   ),
-//                   Padding(
-//                     padding: const EdgeInsets.symmetric(vertical: 8),
-//                     child: Text(
-//                       movieSelected.title,
-//                       style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold, fontSize: 22),
-//                     ),
-//                   ),
-//                   Text(
-//                     movieSelected.voteAverage,
-//                   ),
-//                   Row(
-//                     mainAxisAlignment: MainAxisAlignment.spaceAround,
-//                     children: [
-//                       Text(movieSelected.releaseDate),
-//                       Text(movieSelected.originalLanguage),
-//                     ],
-//                   ),
-//                   Padding(
-//                     padding: const EdgeInsets.symmetric(vertical: 10),
-//                     child: Column(
-//                       crossAxisAlignment: CrossAxisAlignment.start,
-//                       children: [
-//                         Text(
-//                           'Descrição',
-//                           style: TextStyle(
-//                             fontWeight: FontWeight.bold,
-//                           ),
-//                         ),
-//                         Text(movieSelected.description),
-//                       ],
-//                     ),
-//                   ),
-//                 ],
-//               ),
-//             )

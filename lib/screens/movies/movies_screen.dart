@@ -1,3 +1,5 @@
+import 'package:flare_flutter/flare_actor.dart';
+import 'package:flare_flutter/flare_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:movies_app/providers/movie_provider.dart';
 import 'package:movies_app/screens/favorites/favorites_screen.dart';
@@ -8,6 +10,15 @@ import 'package:transparent_image/transparent_image.dart';
 
 class MoviesScreen extends StatelessWidget {
   final TextEditingController searchController = TextEditingController();
+  // Widget icon = Icon(Icons.favorite_border);
+
+  Widget iconFavorite = FlareActor(
+    'assets/animations/AnimHeart.flr',
+    animation: 'pulse',
+  );
+  Widget iconUnFavorite = Icon(Icons.favorite_border);
+  FlareController flareController;
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -73,7 +84,6 @@ class MoviesScreen extends StatelessWidget {
                               padding: EdgeInsets.symmetric(horizontal: 20),
                               height: 54,
                               decoration: BoxDecoration(
-                                
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(20),
                                 boxShadow: [
@@ -154,71 +164,102 @@ class MoviesScreen extends StatelessWidget {
                             crossAxisSpacing: 10.0,
                             mainAxisSpacing: 10.0,
                           ),
-                          itemCount: popMovies.length,
+                          itemCount: popMovies.length + 1,
                           itemBuilder: (context, index) {
-                            return ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: GridTile(
-                                child: GestureDetector(
-                                  onTap: () {
-                                    Navigator.of(context).pushNamed(AppRoutes.MOVIE_DETAIL, arguments: popMovies[index]);
-                                  },
-                                  onLongPress: () {
-                                    Share.share(popMovies[index].imageUrl);
-                                  },
-                                  child: Opacity(
-                                    opacity: 0.9,
-                                    child: Hero(
-                                      tag: popMovies[index].id,
-                                      child: FadeInImage.memoryNetwork(
-                                        placeholder: kTransparentImage,
-                                        image: popMovies[index].imageUrl,
-                                        height: 300.0,
-                                        fit: BoxFit.cover,
+                            if (index < popMovies.length)
+                              return ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: GridTile(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).pushNamed(AppRoutes.MOVIE_DETAIL, arguments: popMovies[index]);
+                                    },
+                                    onLongPress: () {
+                                      Share.share(popMovies[index].imageUrl);
+                                    },
+                                    child: Opacity(
+                                      opacity: 0.9,
+                                      child: Hero(
+                                        tag: popMovies[index].id,
+                                        child: FadeInImage.memoryNetwork(
+                                          placeholder: kTransparentImage,
+                                          image: popMovies[index].imageUrl,
+                                          height: 300.0,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  header: GridTileBar(
+                                    backgroundColor: Colors.black87,
+                                    title: Text(
+                                      popMovies[index].title,
+                                    ),
+                                    trailing: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            Icons.star,
+                                            color: Colors.yellow,
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(left: 8),
+                                            child: Text(
+                                              popMovies[index].voteAverage.toString(),
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  footer: GridTileBar(
+                                    leading: IconButton(
+                                      // iconSize: ,
+                                      icon: popMovies[index].isFavorite ? iconFavorite : iconUnFavorite,
+                                      onPressed: () {
+                                        if (popMovies[index].isFavorite == true) {
+                                          movieProvider.unFavoriteMovie(popMovies[index]);
+                                          // icon = Icon(Icons.favorite_border);
+                                        } else {
+                                          movieProvider.favoriteMovie(popMovies[index]);
+                                          // icon = FlareActor(
+                                          //   'assets/animations/AnimHeart.flr',
+                                          //   animation: 'pulse',
+                                          //   controller: flareController,
+                                          // );
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              );
+                            else
+                              return GestureDetector(
+                                onTap: () {
+                                  movieProvider.fetchMovies(2);
+                                },
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: GridTile(
+                                    child: Container(
+                                      color: Colors.black.withOpacity(0.4),
+                                      child: Center(
+                                        child: Text(
+                                          'Carregar Mais',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 22,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
-                                header: GridTileBar(
-                                  backgroundColor: Colors.black87,
-                                  title: Text(
-                                    popMovies[index].title,
-                                  ),
-                                  trailing: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Row(
-                                      children: [
-                                        Icon(
-                                          Icons.star,
-                                          color: Colors.yellow,
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(left: 8),
-                                          child: Text(
-                                            popMovies[index].voteAverage.toString(),
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                footer: GridTileBar(
-                                  leading: IconButton(
-                                    icon: Icon(popMovies[index].isFavorite ? Icons.favorite : Icons.favorite_border, color: Colors.white),
-                                    onPressed: () {
-                                      if (popMovies[index].isFavorite == true) {
-                                        movieProvider.unFavoriteMovie(popMovies[index]);
-                                      } else {
-                                        movieProvider.favoriteMovie(popMovies[index]);
-                                      }
-                                    },
-                                  ),
-                                ),
-                              ),
-                            );
+                              );
                           },
                         ),
                       ),
@@ -229,7 +270,7 @@ class MoviesScreen extends StatelessWidget {
           bottomNavigationBar: BottomNavigationBar(
             elevation: 0,
             currentIndex: movieProvider.selectedIndex,
-            selectedItemColor: Colors.blue,
+            selectedItemColor: Colors.indigo,
             onTap: (index) {
               movieProvider.changePage(index);
             },

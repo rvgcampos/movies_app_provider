@@ -13,6 +13,7 @@ class FavoriteProvider extends ChangeNotifier {
       'releaseDate': movie.releaseDate,
       'imageUrl': movie.imageUrl,
       'isFavorite': movie.isFavorite,
+      'originalLanguage': movie.originalLanguage,
     };
 
     await moviesBox.write(movie.id.toString(), movieMap);
@@ -35,6 +36,7 @@ class FavoriteProvider extends ChangeNotifier {
         releaseDate: movieMap['releaseDate'],
         imageUrl: movieMap['imageUrl'],
         isFavorite: movieMap['isFavorite'],
+        originalLanguage: movieMap['originalLanguage'],
       );
       favoritesMovies.add(movie);
     }

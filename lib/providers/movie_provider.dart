@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:movies_app/models/Movie.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -27,6 +26,7 @@ class MovieProvider extends ChangeNotifier {
   int selectedIndex = 0;
 
   Future<void> fetchMovies() async {
+    print('fetchmovies');
     final response = await http.get(BASE_URL);
     Map<String, Object> movies = await json.decode(response.body);
 
@@ -34,15 +34,23 @@ class MovieProvider extends ChangeNotifier {
       popularMovies.add(Movie.fromMap(movie));
     }
 
-    print(favoriteMovies);
-    var selectedMovies = [];
-    for (var movie in favoriteMovies) {
-      selectedMovies = popularMovies.where((popMovie) => popMovie.id == movie.id).toList();
-      print(selectedMovies);
-      selectedMovies.map((movieSelected) {
-        return movieSelected.isFavorite = movie.isFavorite;
-      }).toList();
-    }
+    print(popularMovies);
+    // print(favoriteMovies);
+    // var selectedMovies = [];
+    // if (favoriteMovies.isNotEmpty) {
+    //   for (var movie in favoriteMovies) {
+    //     popularMovies = popularMovies.map((popMovie) {
+    //       if (popMovie.id == movie.id) {
+    //         popMovie.isFavorite = movie.isFavorite;
+    //       }
+    //     }).toList();
+    //     // selectedMovies = popularMovies.where((popMovie) => popMovie.id == movie.id).toList();
+    //     // // print(selectedMovies);
+    //     // selectedMovies = selectedMovies.map((movieSelected) {
+    //     //   return movieSelected.isFavorite = movie.isFavorite;
+    //     // }).toList();
+    //   }
+    // }
     searchPopularMovies = popularMovies;
     notifyListeners();
   }
@@ -60,7 +68,7 @@ class MovieProvider extends ChangeNotifier {
 
   void unFavoriteMovie(Movie movie) async {
     if (favoriteMovies.where((movieSelected) => movieSelected.id == movie.id).toList().isNotEmpty) {
-      print('teste');
+      // print('teste');
       movie.isFavorite = false;
       await favoriteProvider.removeFavorite(movie);
       favoriteMovies = await favoriteProvider.readFavorites();
@@ -76,7 +84,6 @@ class MovieProvider extends ChangeNotifier {
   }
 
   void search(String search) {
-    // print(popularMovies);
     var movie = [];
     movie = popularMovies.where(
       (movie) {
@@ -88,14 +95,10 @@ class MovieProvider extends ChangeNotifier {
       },
     ).toList();
 
-    print(movie);
-    // print(movie[0].title);
     if (movie.isNotEmpty) {
-      if (search.length > 0) {
-        popularMovies = movie;
-      }
+      searchPopularMovies = movie;
     } else {
-      popularMovies = searchPopularMovies;
+      searchPopularMovies = popularMovies;
     }
     notifyListeners();
   }

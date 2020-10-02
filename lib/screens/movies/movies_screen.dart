@@ -7,95 +7,229 @@ import 'package:share/share.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class MoviesScreen extends StatelessWidget {
+  final TextEditingController searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     return Consumer<MovieProvider>(
       builder: (_, movieProvider, __) {
         final popMovies = movieProvider.popularMovies;
         return Scaffold(
           appBar: AppBar(
-            backgroundColor: Colors.white,
-            title: Image.asset(
-              "assets/images/tmdb.jpg",
-              fit: BoxFit.cover,
+            backgroundColor: Colors.indigo,
+            elevation: 0,
+            title: Text(
+              movieProvider.selectedIndex == 0 ? 'Filmes Populares' : 'Favoritos',
+              style: TextStyle(fontSize: 25),
             ),
             centerTitle: true,
           ),
           body: movieProvider.selectedIndex == 0
               ? Column(
                   children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.all(10.0),
-                      child: TextField(
-                        decoration: InputDecoration(
-                          labelText: "Pesquisa",
-                          labelStyle: TextStyle(color: Colors.black),
-                          border: OutlineInputBorder(),
-                        ),
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 18.0,
-                        ),
-                        textAlign: TextAlign.center,
-                        onChanged: (text) {
-                          movieProvider.search(text);
-                        },
-                      ),
-                    ),
-                    Expanded(
-                      child: GridView.builder(
-                        padding: EdgeInsets.all(10.0),
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 10.0,
-                          mainAxisSpacing: 10.0,
-                        ),
-                        itemCount: popMovies.length,
-                        itemBuilder: (context, index) {
-                          return ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: GridTile(
-                              child: GestureDetector(
-                                onTap: () {
-                                  Navigator.of(context).pushNamed(AppRoutes.MOVIE_DETAIL, arguments: popMovies[index]);
-                                },
-                                onLongPress: () {
-                                  Share.share(popMovies[index].imageUrl);
-                                },
-                                child: FadeInImage.memoryNetwork(
-                                  placeholder: kTransparentImage,
-                                  image: popMovies[index].imageUrl,
-                                  height: 300.0,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              footer: GridTileBar(
-                                backgroundColor: Colors.black87,
-                                leading: IconButton(
-                                  icon: Icon(popMovies[index].isFavorite ? Icons.favorite : Icons.favorite_border),
-                                  onPressed: () {
-                                    if (popMovies[index].isFavorite == true) {
-                                      movieProvider.unFavoriteMovie(popMovies[index]);
-                                    } else {
-                                      movieProvider.favoriteMovie(popMovies[index]);
-                                    }
-                                  },
-                                ),
-                                title: Text(
-                                  popMovies[index].title,
-                                ),
+                    Container(
+                      margin: EdgeInsets.only(bottom: 20),
+                      height: size.height * 0.2,
+                      child: Stack(
+                        children: <Widget>[
+                          Container(
+                            padding: EdgeInsets.only(
+                              left: 20,
+                              right: 20,
+                              bottom: 56,
+                            ),
+                            height: size.height * 0.2 - 20,
+                            decoration: BoxDecoration(
+                              color: Colors.indigo,
+                              borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(36),
+                                bottomRight: Radius.circular(36),
                               ),
                             ),
-                          );
+                            child: Row(
+                              children: <Widget>[
+                                Expanded(
+                                  child: Text(
+                                    'Bem-vindo ao APP!',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 30,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                            child: Container(
+                              alignment: Alignment.center,
+                              margin: EdgeInsets.symmetric(horizontal: 20),
+                              padding: EdgeInsets.symmetric(horizontal: 20),
+                              height: 54,
+                              decoration: BoxDecoration(
+                                
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(20),
+                                boxShadow: [
+                                  BoxShadow(
+                                    offset: Offset(0, 10),
+                                    blurRadius: 50,
+                                    color: Colors.blue.withOpacity(0.23),
+                                  ),
+                                ],
+                              ),
+                              child: Row(
+                                children: <Widget>[
+                                  Expanded(
+                                    child: TextField(
+                                      controller: searchController,
+                                      onSubmitted: (text) {
+                                        movieProvider.search(text);
+                                        Navigator.of(context).pushNamed(AppRoutes.SEARCH_SCREEN, arguments: text);
+                                        searchController.text = '';
+                                      },
+                                      decoration: InputDecoration(
+                                        hintText: "Pesquisar...",
+                                        hintStyle: TextStyle(
+                                          color: Colors.blue,
+                                        ),
+                                        enabledBorder: InputBorder.none,
+                                        focusedBorder: InputBorder.none,
+                                      ),
+                                    ),
+                                  ),
+                                  IconButton(
+                                    icon: Icon(
+                                      Icons.search,
+                                      color: Colors.blue,
+                                    ),
+                                    onPressed: () {
+                                      movieProvider.search(searchController.text);
+                                      Navigator.of(context).pushNamed(AppRoutes.SEARCH_SCREEN, arguments: searchController.text);
+                                      searchController.text = '';
+                                    },
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    // Padding(
+                    //   padding: EdgeInsets.all(10.0),
+                    //   child: TextField(
+                    //     decoration: InputDecoration(
+                    //       labelText: "Pesquisa",
+                    //       labelStyle: TextStyle(color: Colors.black),
+                    //       border: OutlineInputBorder(),
+                    //     ),
+                    //     style: TextStyle(
+                    //       color: Colors.black,
+                    //       fontSize: 18.0,
+                    //     ),
+                    //     textAlign: TextAlign.center,
+                    //     onChanged: (text) {
+                    //       movieProvider.search(text);
+                    //     },
+                    //   ),
+                    // ),
+                    Expanded(
+                      child: RefreshIndicator(
+                        color: Colors.indigo,
+                        onRefresh: () async {
+                          await movieProvider.fetchMovies();
+                          return null;
                         },
+                        child: GridView.builder(
+                          padding: EdgeInsets.all(10.0),
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 10.0,
+                            mainAxisSpacing: 10.0,
+                          ),
+                          itemCount: popMovies.length,
+                          itemBuilder: (context, index) {
+                            return ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: GridTile(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context).pushNamed(AppRoutes.MOVIE_DETAIL, arguments: popMovies[index]);
+                                  },
+                                  onLongPress: () {
+                                    Share.share(popMovies[index].imageUrl);
+                                  },
+                                  child: Opacity(
+                                    opacity: 0.9,
+                                    child: Hero(
+                                      tag: popMovies[index].id,
+                                      child: FadeInImage.memoryNetwork(
+                                        placeholder: kTransparentImage,
+                                        image: popMovies[index].imageUrl,
+                                        height: 300.0,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                header: GridTileBar(
+                                  backgroundColor: Colors.black87,
+                                  title: Text(
+                                    popMovies[index].title,
+                                  ),
+                                  trailing: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.star,
+                                          color: Colors.yellow,
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(left: 8),
+                                          child: Text(
+                                            popMovies[index].voteAverage.toString(),
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                footer: GridTileBar(
+                                  leading: IconButton(
+                                    icon: Icon(popMovies[index].isFavorite ? Icons.favorite : Icons.favorite_border, color: Colors.white),
+                                    onPressed: () {
+                                      if (popMovies[index].isFavorite == true) {
+                                        movieProvider.unFavoriteMovie(popMovies[index]);
+                                      } else {
+                                        movieProvider.favoriteMovie(popMovies[index]);
+                                      }
+                                    },
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
                       ),
                     ),
                   ],
                 )
               : FavoritesScreen(),
           bottomNavigationBar: BottomNavigationBar(
+            elevation: 0,
             currentIndex: movieProvider.selectedIndex,
-            selectedItemColor: Colors.amber[800],
+            selectedItemColor: Colors.blue,
             onTap: (index) {
               movieProvider.changePage(index);
             },
@@ -105,7 +239,7 @@ class MoviesScreen extends StatelessWidget {
                 title: Text('Filmes'),
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.movie_filter),
+                icon: Icon(Icons.stars),
                 title: Text('Favoritos'),
               ),
             ],

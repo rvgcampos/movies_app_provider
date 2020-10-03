@@ -56,8 +56,6 @@ class MovieProvider extends ChangeNotifier {
       movie.isFavorite = true;
       await favoriteProvider.saveFavorite(movie);
       favoriteMovies = await favoriteProvider.readFavorites();
-      // print(favoriteMovies);
-      // print(popularMovies[0].isFavorite);
 
       if (favoriteMovies.isNotEmpty) {
         for (var popMovie in popularMovies) {
@@ -80,8 +78,6 @@ class MovieProvider extends ChangeNotifier {
       movie.isFavorite = false;
       await favoriteProvider.removeFavorite(movie);
       favoriteMovies = await favoriteProvider.readFavorites();
-      // print(favoriteMovies[0].isFavorite);
-      // print(popularMovies[0].isFavorite);
 
       if (favoriteMovies.isNotEmpty) {
         for (var popMovie in popularMovies) {
@@ -99,7 +95,7 @@ class MovieProvider extends ChangeNotifier {
           popMovie.isFavorite = false;
         }
       }
-      // print(movie.isFavorite);
+      print(movie.isFavorite);
       searchPopularMovies = popularMovies;
 
       notifyListeners();

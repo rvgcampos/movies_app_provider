@@ -18,6 +18,7 @@ class GenreCard extends StatelessWidget {
       child: Center(
         child: Text(
           genre,
+          textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 15,
             color: Colors.white,

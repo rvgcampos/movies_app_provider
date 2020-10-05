@@ -22,6 +22,8 @@ Projeto feito tendo como base de dados a API The Movie Database.
 
 - Possibilidade de recarregar a lista de filmes populares apenas "puxando" GridView para baixo (uso do RefreshIndicator)
 
+- Uso do GetxStorage para armazenamento local
+
 Vídeo no Youtube mostrando o APP rodando:
 
 - [Movies App](https://youtu.be/FYp8zFuaTNI)

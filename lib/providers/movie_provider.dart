@@ -115,7 +115,7 @@ class MovieProvider extends ChangeNotifier {
     movie = popularMovies.where(
       (movie) {
         if (search.length > 0) {
-          return movie.title.toLowerCase() == search.toLowerCase() || movie.title.toLowerCase().startsWith(search.toLowerCase());
+          return  movie.title.toLowerCase().startsWith(search.toLowerCase());
         } else {
           return false;
         }
@@ -125,7 +125,7 @@ class MovieProvider extends ChangeNotifier {
     if (movie.isNotEmpty) {
       searchPopularMovies = movie;
     } else {
-      searchPopularMovies = popularMovies;
+      searchPopularMovies = [];
     }
     notifyListeners();
   }

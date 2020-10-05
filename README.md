@@ -20,6 +20,8 @@ Projeto feito tendo como base de dados a API The Movie Database.
 
 - Animação do coração ao favoritar/desfavoritar
 
+- Possibilidade de recarregar a lista de filmes populares apenas "puxando" GridView para baixo (uso do RefreshIndicator)
+
 Vídeo no Youtube mostrando o APP rodando:
 
 - [Movies App](https://youtu.be/FYp8zFuaTNI)

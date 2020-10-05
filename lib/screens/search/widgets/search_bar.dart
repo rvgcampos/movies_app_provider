@@ -46,6 +46,17 @@ class SearchBar extends StatelessWidget {
             splashColor: Colors.transparent,
             splashRadius: 1,
             onPressed: () {
+              searchController.text = '';
+            },
+            icon: Icon(
+              Icons.delete_outline,
+              color: Colors.red.withOpacity(0.8),
+            ),
+          ),
+          IconButton(
+            splashColor: Colors.transparent,
+            splashRadius: 1,
+            onPressed: () {
               movieProvider.search(searchController.text);
             },
             icon: Icon(

@@ -14,7 +14,9 @@ class FavoriteCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         print(favMovies[index]);
-        Navigator.of(context).pushNamed(AppRoutes.MOVIE_DETAIL, arguments: favMovies[index]);
+        Navigator.of(context).pushNamed(AppRoutes.MOVIE_DETAIL, arguments: {
+          'movieSelected': favMovies[index],
+        });
       },
       child: Card(
         elevation: 4,

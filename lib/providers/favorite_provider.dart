@@ -13,9 +13,9 @@ class FavoriteProvider extends ChangeNotifier {
       'releaseDate': movie.releaseDate,
       'imageUrl': movie.imageUrl,
       'isFavorite': movie.isFavorite,
-      'originalLanguage': movie.originalLanguage, 
-      'genres': movie.genres, 
-      'voteAverage': movie.voteAverage, 
+      'originalLanguage': movie.originalLanguage,
+      'genres': movie.genres,
+      'voteAverage': movie.voteAverage,
     };
 
     await moviesBox.write(movie.id.toString(), movieMap);
@@ -27,7 +27,7 @@ class FavoriteProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<List<Movie>> readFavorites() async{
+  Future<List<Movie>> readFavorites() async {
     List<Movie> favoritesMovies = [];
     final moviesBoxValues = await moviesBox.getValues();
     for (final movieMap in moviesBoxValues) {
@@ -44,11 +44,12 @@ class FavoriteProvider extends ChangeNotifier {
       );
       favoritesMovies.add(movie);
     }
+
     notifyListeners();
     return favoritesMovies;
   }
 
-  Future<void> eraseBox() async{
+  Future<void> eraseBox() async {
     await moviesBox.erase();
     notifyListeners();
   }

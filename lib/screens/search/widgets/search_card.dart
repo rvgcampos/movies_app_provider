@@ -19,14 +19,17 @@ class SearchCard extends StatelessWidget {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                popMovie.title,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
+              Flexible(
+                flex: 1,
+                child: Text(
+                  popMovie.title,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
                 ),
               ),
-              Text(popMovie.releaseDate)
+              Flexible(flex: 1, child: Text(popMovie.releaseDate))
             ],
           ),
           subtitle: Text(

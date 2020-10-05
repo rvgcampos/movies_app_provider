@@ -27,15 +27,18 @@ class MovieProvider extends ChangeNotifier {
 
   Future<void> fetchMovies([int page = 1]) async {
     print('fetchmovies');
+    print(popularMovies);
     String url = "https://api.themoviedb.org/3/movie/popular?api_key=$API_KEY&language=pt-BR&page=";
     url += page.toString();
     print(url);
     final response = await http.get(url);
+    print("Response ${response.body}");
     Map<String, Object> movies = await json.decode(response.body);
 
     for (var movie in movies["results"]) {
       popularMovies.add(Movie.fromMap(movie));
     }
+    print(popularMovies);
 
     if (favoriteMovies.isNotEmpty) {
       for (var popMovie in popularMovies) {

@@ -163,13 +163,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.12.0"
-  gradient_app_bar:
-    dependency: "direct main"
-    description:
-      name: gradient_app_bar
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.1"
   http:
     dependency: "direct main"
     description:

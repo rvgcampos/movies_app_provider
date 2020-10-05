@@ -1,6 +1,6 @@
 # Movies APP
 
-Projeto feito com tendo como base de dados a API The Movie Database.
+Projeto feito tendo como base de dados a API The Movie Database.
 
 <img src="assets/images/git.png" width=400 height=800>
 

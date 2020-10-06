@@ -17,25 +17,36 @@ class SearchScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.indigo,
         title: Text('Resultado da Busca'),
+        centerTitle: true,
+        elevation: 0,
       ),
       body: Consumer<MovieProvider>(
         builder: (_, movieProvider, __) {
           final List<Movie> searchMovies = movieProvider.searchPopularMovies;
-          return Column(
-            children: [
-              SearchBar(movieProvider, searchController),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ListView.builder(
-                      itemCount: searchMovies.length,
-                      itemBuilder: (_, index) {
-                        final popMovie = searchMovies[index];
-                        return SearchCard(popMovie);
-                      }),
-                ),
+          return Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter,
+                colors: [Colors.white, Colors.indigo],
               ),
-            ],
+            ),
+            child: Column(
+              children: [
+                SearchBar(movieProvider, searchController),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ListView.builder(
+                        itemCount: searchMovies.length,
+                        itemBuilder: (_, index) {
+                          final popMovie = searchMovies[index];
+                          return SearchCard(popMovie);
+                        }),
+                  ),
+                ),
+              ],
+            ),
           );
         },
       ),

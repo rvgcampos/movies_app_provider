@@ -11,6 +11,7 @@ class MoviesDetailScreen extends StatelessWidget {
     final Map<String, Object> arguments = ModalRoute.of(context).settings.arguments;
     final Movie movieSelected = arguments['movieSelected'];
     Size size = MediaQuery.of(context).size;
+    final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
 
     return Scaffold(
       appBar: AppBar(
@@ -148,7 +149,7 @@ class MoviesDetailScreen extends StatelessWidget {
                     ),
                   ),
                   cards(movieSelected, size),
-                  SizedBox(height: size.height *0.06),
+                  SizedBox(height: isLandscape ?size.height *0.03 : size.height *0.06),
                   Row(
                     children: <Widget>[
                       Flexible(
@@ -168,7 +169,7 @@ class MoviesDetailScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(15),
                             child: Container(
                               width: size.width * 0.40,
-                              height: size.height * 0.3,
+                              height:isLandscape ?size.height * 0.25 : size.height * 0.3,
                               child: Hero(
                                 tag: movieSelected.id,
                                 child: Image.network(

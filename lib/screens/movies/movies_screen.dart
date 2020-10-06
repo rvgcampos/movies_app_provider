@@ -9,10 +9,11 @@ class MoviesScreen extends StatelessWidget {
   final TextEditingController searchController = TextEditingController();
 
   int pageIndex = 2;
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+
+    final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
 
     return Consumer<MovieProvider>(
       builder: (_, movieProvider, __) {
@@ -34,6 +35,7 @@ class MoviesScreen extends StatelessWidget {
                       movieProvider: movieProvider,
                       size: size,
                       searchController: searchController,
+                      isLandscape: isLandscape,
                     ),
                     Expanded(
                       child: RefreshIndicator(
@@ -44,21 +46,18 @@ class MoviesScreen extends StatelessWidget {
                         },
                         child: popMovies.isEmpty
                             ? Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
                                     'Conexão com a internet indisponível',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20
-                                    ),
+                                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                                   ),
-                              ],
-                            )
+                                ],
+                              )
                             : GridView.builder(
                                 padding: EdgeInsets.all(10.0),
                                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
+                                  crossAxisCount: isLandscape? 4 : 2,
                                   crossAxisSpacing: 10.0,
                                   mainAxisSpacing: 10.0,
                                 ),

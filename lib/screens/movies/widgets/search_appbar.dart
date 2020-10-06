@@ -6,8 +6,9 @@ class SearchAppBar extends StatelessWidget {
   final Size size;
   final MovieProvider movieProvider;
   final TextEditingController searchController;
+  final bool isLandscape;
 
-  SearchAppBar({this.size, this.movieProvider, this.searchController});
+  SearchAppBar({this.size, this.movieProvider, this.searchController, this.isLandscape});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +17,7 @@ class SearchAppBar extends StatelessWidget {
       height: size.height * 0.2,
       child: Stack(
         children: <Widget>[
-          Container(
+          isLandscape ? Container():Container(
             padding: EdgeInsets.only(
               left: 20,
               right: 20,

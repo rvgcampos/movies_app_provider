@@ -24,6 +24,8 @@ Projeto feito tendo como base de dados a API The Movie Database.
 
 - Uso do GetxStorage para armazenamento local
 
+- App adaptado para posição horizontal
+
 Vídeo no Youtube mostrando o APP rodando:
 
 - [Movies App](https://youtu.be/FYp8zFuaTNI)

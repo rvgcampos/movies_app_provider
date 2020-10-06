@@ -26,17 +26,17 @@ class MovieProvider extends ChangeNotifier {
   int selectedIndex = 0;
 
   Future<void> fetchMovies([int page = 1]) async {
-    print('fetchmovies');
     print(popularMovies);
     String url = "https://api.themoviedb.org/3/movie/popular?api_key=$API_KEY&language=pt-BR&page=";
     url += page.toString();
-    print(url);
+
     final response = await http.get(url);
-    print("Response ${response.body}");
     Map<String, Object> movies = await json.decode(response.body);
 
-    for (var movie in movies["results"]) {
-      popularMovies.add(Movie.fromMap(movie));
+    if (popularMovies.isEmpty) {
+      for (var movie in movies["results"]) {
+        popularMovies.add(Movie.fromMap(movie));
+      }
     }
     print(popularMovies);
 
@@ -115,7 +115,7 @@ class MovieProvider extends ChangeNotifier {
     movie = popularMovies.where(
       (movie) {
         if (search.length > 0) {
-          return  movie.title.toLowerCase().startsWith(search.toLowerCase());
+          return movie.title.toLowerCase().startsWith(search.toLowerCase());
         } else {
           return false;
         }
